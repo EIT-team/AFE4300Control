@@ -105,13 +105,13 @@ f = open(filename, 'w')
 f.write("time,amp_8k,amp16k,amp32k,amp64k,amp128k,phase8k,phase16k,phase32k,phase64k,phase128k\n")
 f.flush()
 
-Nrec =10;
+Nrec =5;
 
 for iRec in range(0,Nrec):
     print "doing measurement " + str(iRec)
     print "Waiting for measurement"
-    print FWR_read(0x0408)
-    wait_for_stability(stability_thresh=0.001)
+    #print FWR_read(0x0408)
+    #wait_for_stability(stability_thresh=0.001)
     sys.stdout.write("reading 8kHz ");
     IQ_8I, IQ_8P = IQ_read(0x0408, frequency=8, quiet=False)
     sys.stdout.write("16kHz ")
@@ -132,3 +132,4 @@ for iRec in range(0,Nrec):
 GUI.__del__()
 f.close()
 
+#abahashadhad
