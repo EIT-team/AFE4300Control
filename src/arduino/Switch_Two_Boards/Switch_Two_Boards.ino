@@ -18,11 +18,8 @@ Jimmy 2014/2015
 int sinkpin_A = 2; // pin that the sink is connected to
 int sourcepin_A = 4;
 
-int sinkpin_A = 2; // pin that the sink is connected to
-int sourcepin_A = 4;
-
-int sinkpin_B = 2; // pin that the sink is connected to
-int sourcepin_B = 4;
+int sinkpin_B = 10; // pin that the sink is connected to
+int sourcepin_B = 14;
 
 const int chnmax = 199; // maximum number of channels
 
@@ -73,7 +70,8 @@ void setup() {
 	Serial.println("on");
 	SwitchesPwrOn();
 	delay(100);
-	programswitches(sourcepin_A, sinkpin_A,sourcepin_B,sinkpin_B, TotalPins);
+	programswitches2(sourcepin_A, sinkpin_A, sourcepin_B + 40, sinkpin_B + 40, TotalPins);
+
 	digitalWriteDirect(SYNC, HIGH); // switch dat!
 	delay(500);
 	Serial.println("off");
@@ -83,7 +81,8 @@ void setup() {
 	SwitchesPwrOn();
 
 	delay(100);
-	programswitches(sourcepin_A, sinkpin_A,sourcepin_B,sinkpin_B, TotalPins);
+	programswitches2(sourcepin_A, sinkpin_A, sourcepin_B + 40, sinkpin_B + 40, TotalPins);
+
 	digitalWriteDirect(SYNC, HIGH); // switch dat!
 	delay(500);
 	Serial.println("off");
@@ -100,39 +99,76 @@ void loop() {
 	// put your main code here, to run repeatedly:
 
 	while (Serial.available() > 0) {
-		int c = Serial.parseInt();
+		int Input_1 = Serial.parseInt();
+		int Input_2 = Serial.parseInt();
+		int Input_3 = Serial.parseInt();
+		int Input_4 = Serial.parseInt();
 
 		if (Serial.read() == '\n') {
-			//Serial.println(c);
+			Serial.println(Input_1);
 
-			if (c < chnmax)
+			if (Input_1 < chnmax)
 			{
-				sourcepin = c;
+				sourcepin_A = Input_1;
 			}
 			else
 			{
-				c = c - 200;
-				if (c < chnmax)
-				{
-					sinkpin = c;
-				}
-				else
-				{
-					Serial.println("too high channel number");
-				}
+				sourcepin_A = -1;
 			}
 
-			Serial.print("Setting switches to source chn: ");
-			Serial.print(sourcepin);
-			Serial.print(" sink chn: ");
-			Serial.println(sinkpin);
-			programswitches(sourcepin, sinkpin,TotalPins); //program dem switches
+			Serial.println(Input_2);
+
+			if (Input_2 < chnmax)
+			{
+				sinkpin_A = Input_2;
+			}
+			else
+			{
+				sinkpin_A = -1;
+			}
+
+			Serial.println(Input_3);
+
+			if (Input_3 < chnmax)
+			{
+				sourcepin_B = Input_3;
+			}
+			else
+			{
+				sourcepin_B = -1;
+			}
+
+			Serial.println(Input_4);
+
+			if (Input_4 < chnmax)
+			{
+				sinkpin_B = Input_4;
+			}
+			else
+			{
+				sinkpin_B = -1;
+			}
+
+			Serial.print("The source pin for board A is : ");
+			Serial.println(sourcepin_A);
+			Serial.print("The sink pin for board A is : ");
+			Serial.println(sinkpin_A);
+			Serial.print("The source pin for board B is : ");
+			Serial.println(sourcepin_B);
+			Serial.print("The sink pin for board B is : ");
+			Serial.println(sinkpin_B);
+
+			Serial.println("Switching");
+			programswitches2(sourcepin_A, sinkpin_A, sourcepin_B + 40, sinkpin_B + 40, TotalPins);
+			//programswitches(sourcepin_A, sinkpin_A, TotalPins);
 			digitalWriteDirect(SYNC, HIGH); // switch dat!
 
 
+
 		}
+
+
+
 	}
-
-
-
 }
+

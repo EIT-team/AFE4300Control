@@ -87,3 +87,19 @@ ENV/
 
 # Rope project settings
 .ropeproject
+**/*.sln
+**/*.suo
+**/*.vcxproj
+**/*.vcxproj.filters
+**/Visual*
+**/__vm*
+**/~$*.sld*
+**/*.asv
+**/.pioenvs
+**/.sconsign.dblite
+**/.psess
+**/Debug
+**/*.bak
+**/plot.log
+**/.idea
+**/Release
