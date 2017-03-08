@@ -38,11 +38,10 @@ inline void digitalWriteDirect(int pin, int val) {
 
 
 void setup() {
-
-
 	Serial.begin(115200);
 	Serial.println("#############################");
-	Serial.println("Hello There! This is a ScouseTom Switch Test");
+	Serial.println("Hello There! You are controlling two switchboards");
+	/*
 	Serial.print("The number of boards in the daisy chain is : ");
 	Serial.println(NumBoard);
 	Serial.print("The source pin for board A is : ");
@@ -60,38 +59,38 @@ void setup() {
 	Serial.println("This is repeated before allowing the user to select a pin");
 	Serial.println("#############################");
 	delay(1000);
-
+*/
 	init_pins();
 
-	Serial.println("Pins initialised, should ALL be closed now");
-	delay(1000);
+	//Serial.println("Pins initialised, should ALL be closed now");
+	//delay(1000);
 
 
-	Serial.println("on");
-	SwitchesPwrOn();
-	delay(100);
-	programswitches2(sourcepin_A, sinkpin_A, sourcepin_B + 40, sinkpin_B + 40, TotalPins);
+	//Serial.println("on");
+	//SwitchesPwrOn();
+	//delay(100);
+	//programswitches2(sourcepin_A, sinkpin_A, sourcepin_B + 40, sinkpin_B + 40, TotalPins);
 
-	digitalWriteDirect(SYNC, HIGH); // switch dat!
-	delay(500);
-	Serial.println("off");
+	//digitalWriteDirect(SYNC, HIGH); // switch dat!
+	//delay(500);
+	//Serial.println("off");
+	//SwitchesPwrOff();
+	//delay(500);
+	//Serial.println("on");
+	//SwitchesPwrOn();
+
+	//delay(100);
+	//programswitches2(sourcepin_A, sinkpin_A, sourcepin_B + 40, sinkpin_B + 40, TotalPins);
+
+	//digitalWriteDirect(SYNC, HIGH); // switch dat!
+	//delay(500);
+	//Serial.println("off");
 	SwitchesPwrOff();
-	delay(500);
-	Serial.println("on");
 	SwitchesPwrOn();
-
-	delay(100);
-	programswitches2(sourcepin_A, sinkpin_A, sourcepin_B + 40, sinkpin_B + 40, TotalPins);
-
-	digitalWriteDirect(SYNC, HIGH); // switch dat!
-	delay(500);
-	Serial.println("off");
-	SwitchesPwrOff();
-	SwitchesPwrOn();
-	Serial.println("#############################");
+	Serial.println("#############################");/*
 	Serial.println("waiting for input each time give ");
 	Serial.println("i.e. 32 sets source to pin 32, 132 sets sink to 32");
-	Serial.println("#############################");
+	Serial.println("#############################");*/
 
 }
 
@@ -105,7 +104,7 @@ void loop() {
 		int Input_4 = Serial.parseInt();
 
 		if (Serial.read() == '\n') {
-			Serial.println(Input_1);
+			//Serial.println(Input_1);
 
 			if (Input_1 < chnmax)
 			{
@@ -116,7 +115,7 @@ void loop() {
 				sourcepin_A = -1;
 			}
 
-			Serial.println(Input_2);
+			//Serial.println(Input_2);
 
 			if (Input_2 < chnmax)
 			{
@@ -127,7 +126,7 @@ void loop() {
 				sinkpin_A = -1;
 			}
 
-			Serial.println(Input_3);
+			//Serial.println(Input_3);
 
 			if (Input_3 < chnmax)
 			{
@@ -138,7 +137,7 @@ void loop() {
 				sourcepin_B = -1;
 			}
 
-			Serial.println(Input_4);
+			//Serial.println(Input_4);
 
 			if (Input_4 < chnmax)
 			{
@@ -149,16 +148,15 @@ void loop() {
 				sinkpin_B = -1;
 			}
 
-			Serial.print("The source pin for board A is : ");
-			Serial.println(sourcepin_A);
-			Serial.print("The sink pin for board A is : ");
-			Serial.println(sinkpin_A);
-			Serial.print("The source pin for board B is : ");
-			Serial.println(sourcepin_B);
-			Serial.print("The sink pin for board B is : ");
+			Serial.print("Ard:Switch ");
+			Serial.print(sourcepin_A);
+			Serial.print(", ");
+			Serial.print(sinkpin_A);
+			Serial.print(", ");
+			Serial.print(sourcepin_B);
+			Serial.print(", ");
 			Serial.println(sinkpin_B);
 
-			Serial.println("Switching");
 			programswitches2(sourcepin_A, sinkpin_A, sourcepin_B + 40, sinkpin_B + 40, TotalPins);
 			//programswitches(sourcepin_A, sinkpin_A, TotalPins);
 			digitalWriteDirect(SYNC, HIGH); // switch dat!
