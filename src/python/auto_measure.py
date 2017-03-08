@@ -17,8 +17,18 @@ def IQ_read(input_mask, frequency=64, delay=0.5, quiet=False):
     GUI.write_register("AFE4300", "IQ_MODE_ENABLE", 0x0800) #Enable IQ mode
     set_frequency(frequency)
 
-    GUI.write_register("AFE4300", "VSENSE_MUX", input_mask)
-    GUI.write_register("AFE4300", "ISW_MUX", input_mask)
+    #GUI.write_register("AFE4300", "VSENSE_MUX", input_mask)
+    #GUI.write_register("AFE4300", "ISW_MUX", input_mask)
+
+    #set v+ to vsense1
+    GUI.write_register("AFE4300","VSENSE_MUX",0x800)
+    #set v- to vsense0
+    GUI.write_register("AFE4300","VSENSE_MUX",0x804)
+    #set fb0 to iout0 - current source
+    GUI.write_register("AFE4300","ISW_MUX",0x4)
+    #set fb1 to iout1 - cs
+    GUI.write_register("AFE4300","ISW_MUX",0x804)
+    
     GUI.write_register("AFE4300", "ADC_CONTROL_REGISTER2", 0x63) #ADC connected to I channel
     wait_for_stability(stability_thresh=0.002, quiet=quiet)
     result_I = GUI.read_register("AFE4300","ADC_DATA_RESULT")#*(1.7/32768.0)
@@ -47,15 +57,15 @@ def set_frequency(frequency_khz, set_IQ_demod=True):
         if set_IQ_demod:
             GUI.write_register("AFE4300", "DEVICE_CONTROL2", 0x2000)#set IQ Demod clock accordingly
     elif frequency_khz == 32:
-        GUI.write_register("AFE4300", "BCM_DAC_FREQ", 0x20)     #DAC to 16 kHz
+        GUI.write_register("AFE4300", "BCM_DAC_FREQ", 0x20)     #DAC to 32 kHz
         if set_IQ_demod:
             GUI.write_register("AFE4300", "DEVICE_CONTROL2", 0x1800)#set IQ Demod clock accordingly
     elif frequency_khz == 64:
-        GUI.write_register("AFE4300", "BCM_DAC_FREQ", 0x40)     #DAC to 16 kHz
+        GUI.write_register("AFE4300", "BCM_DAC_FREQ", 0x40)     #DAC to 64 kHz
         if set_IQ_demod:
             GUI.write_register("AFE4300", "DEVICE_CONTROL2", 0x1000)#set IQ Demod clock accordingly
     elif frequency_khz == 128:
-        GUI.write_register("AFE4300", "BCM_DAC_FREQ", 0x80)     #DAC to 16 kHz
+        GUI.write_register("AFE4300", "BCM_DAC_FREQ", 0x80)     #DAC to 128 kHz
         if set_IQ_demod:
             GUI.write_register("AFE4300", "DEVICE_CONTROL2", 0x0800)#set IQ Demod clock accordingly
     else:
@@ -82,6 +92,8 @@ def wait_for_stability(avglen = 10, stability_thresh=0.001, quiet=False):
     if not quiet:
         print "" 
 
+
+## first line called is this one
 GUI=GUI_Module.Device_GUI("AFE4300 Device GUI")
 
 GUI.reset_evm(0)
@@ -93,10 +105,13 @@ f = open(filename, 'w')
 f.write("time,amp_8k,amp16k,amp32k,amp64k,amp128k,phase8k,phase16k,phase32k,phase64k,phase128k\n")
 f.flush()
 
-while(True):
+Nrec =5;
+
+for iRec in range(0,Nrec):
+    print "doing measurement " + str(iRec)
     print "Waiting for measurement"
-    print FWR_read(0x0408)
-    wait_for_stability(stability_thresh=0.001)
+    #print FWR_read(0x0408)
+    #wait_for_stability(stability_thresh=0.001)
     sys.stdout.write("reading 8kHz ");
     IQ_8I, IQ_8P = IQ_read(0x0408, frequency=8, quiet=False)
     sys.stdout.write("16kHz ")
@@ -115,4 +130,6 @@ while(True):
         IQ_8I, IQ_16I, IQ_32I, IQ_64I, IQ_128I, IQ_8P, IQ_16P, IQ_32P, IQ_64P, IQ_128P)
 
 GUI.__del__()
+f.close()
 
+#abahashadhad

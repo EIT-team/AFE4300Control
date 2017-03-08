@@ -1,0 +1,13 @@
+GUI_Module=__import__('Device_GUI')
+
+GUI=GUI_Module.Device_GUI("AFE4300 Device GUI")
+GUI.write_register("AFE4300","VSENSE_MUX",0x804)
+
+GUI.write_register("AFE4300","ISW_MUX",0x804)
+
+GUI.capture_analysis(512,0,0)
+GUI.__del__()
+
+
+
+
